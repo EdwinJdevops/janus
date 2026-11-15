@@ -8,14 +8,18 @@ permissions:
 jobs:
   validate-research:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Run unit tests
+        run: go test ./...
       - name: Check required research artifacts
         shell: bash
         run: |
           set -euo pipefail
-          for f in README.md docs/hypotheses.md docs/experiment-protocol.md docs/source-audit.md docs/operator-validation.md docs/decisions/0001-validation-before-implementation.md; do
+          for f in README.md docs/hypotheses.md docs/experiment-protocol.md docs/source-audit.md docs/operator-validation.md docs/decisions/0001-validation-before-implementation.md docs/findings/0001-admission-vs-apf.md docs/findings/0002-gitops-reconciliation.md docs/findings/0003-release-baseline.md; do
             test -s "$f" || { echo "Missing or empty: $f"; exit 1; }
           done
-          echo "Required research documents are present."
