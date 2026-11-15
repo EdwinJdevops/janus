@@ -1,0 +1,21 @@
+name: Research integrity
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check required research artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in README.md docs/hypotheses.md docs/experiment-protocol.md docs/source-audit.md docs/operator-validation.md docs/decisions/0001-validation-before-implementation.md; do
+            test -s "$f" || { echo "Missing or empty: $f"; exit 1; }
+          done
+          echo "Required research documents are present."
