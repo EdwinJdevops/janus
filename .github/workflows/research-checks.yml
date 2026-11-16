@@ -15,7 +15,7 @@ jobs:
         with:
           go-version-file: go.mod
       - name: Run unit tests
-        run: go test ./...
+        run: go test -race -count=1 ./...
       - name: Check required research artifacts
         shell: bash
         run: |
