@@ -41,3 +41,12 @@ func TestAdmissionReviewInvalidRequest(t *testing.T) {
 		}
 	}
 }
+
+func TestRejectTrailingJSON(t *testing.T) {
+	request := httptest.NewRequest(http.MethodPost, "/validate", strings.NewReader(`{"apiVersion":"admission.k8s.io/v1","kind":"AdmissionReview","request":{"uid":"x"}} {"extra":true}`))
+	recorder := httptest.NewRecorder()
+	Handler(recorder, request)
+	if recorder.Code != http.StatusBadRequest {
+		t.Fatalf("got %d want 400", recorder.Code)
+	}
+}
