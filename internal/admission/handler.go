@@ -36,12 +36,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	r.Body = http.MaxBytesReader(w, r.Body, 1<<20)
 	defer r.Body.Close()
 	var in Review
-	if err := json.NewDecoder(r.Body).Decode(&in); err != nil {
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&in); err != nil {
 		http.Error(w, "invalid AdmissionReview", http.StatusBadRequest)
 		return
 	}
 	var extra any
-	if err := json.NewDecoder(r.Body).Decode(&extra); err != io.EOF {
+	if err := decoder.Decode(&extra); err != io.EOF {
 		http.Error(w, "trailing AdmissionReview data", http.StatusBadRequest)
 		return
 	}
