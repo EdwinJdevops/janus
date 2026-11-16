@@ -2,6 +2,7 @@ package admission
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 )
 
@@ -37,6 +38,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	var in Review
 	if err := json.NewDecoder(r.Body).Decode(&in); err != nil {
 		http.Error(w, "invalid AdmissionReview", http.StatusBadRequest)
+		return
+	}
+	var extra any
+	if err := json.NewDecoder(r.Body).Decode(&extra); err != io.EOF {
+		http.Error(w, "trailing AdmissionReview data", http.StatusBadRequest)
 		return
 	}
 	if in.Request == nil || in.Request.UID == "" || in.APIVersion != "admission.k8s.io/v1" || in.Kind != "AdmissionReview" {
