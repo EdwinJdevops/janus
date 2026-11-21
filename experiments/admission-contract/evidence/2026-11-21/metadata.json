@@ -1,0 +1,12 @@
+{
+  "binaries": {
+    "etcd": {
+      "sha256": "6409d0af883a8a098083c1622c011ee0586e1914c3857d2731c27d0df6933d52",
+      "version": "etcd Version: 3.6.4\nGit SHA: 5400cdc\nGo Version: go1.23.11\nGo OS/Arch: linux/amd64"
+    },
+    "kube-apiserver": {
+      "sha256": "48da54d0563302fa81101d18f048ce123ca1fb7ef5e429d4245c428594a056df",
+      "version": "Kubernetes v1.34.0"
+    }
+  }
+}

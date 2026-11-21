@@ -1,0 +1,134 @@
+[
+  {
+    "case": "baseline",
+    "namespace": "janus-test",
+    "expected": 201,
+    "http_status": 201,
+    "body": {
+      "kind": "ConfigMap",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "baseline",
+        "namespace": "janus-test",
+        "uid": "bdc11bc7-0e5b-44fc-8b47-5a95098b3974",
+        "resourceVersion": "201",
+        "creationTimestamp": "2026-11-21T08:17:17Z"
+      }
+    },
+    "timestamp": 1795249037.0487442,
+    "stored_object_http_status": 200
+  },
+  {
+    "case": "deny-ignore",
+    "namespace": "janus-test",
+    "expected": 429,
+    "http_status": 429,
+    "body": {
+      "kind": "Status",
+      "apiVersion": "v1",
+      "metadata": {},
+      "status": "Failure",
+      "message": "admission webhook \"contract.janus.local\" denied the request: JANUS synthetic contract",
+      "code": 429
+    },
+    "timestamp": 1795249040.167872,
+    "stored_object_http_status": 404
+  },
+  {
+    "case": "outside-ignore",
+    "namespace": "janus-control",
+    "expected": 201,
+    "http_status": 201,
+    "body": {
+      "kind": "ConfigMap",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "outside-ignore",
+        "namespace": "janus-control",
+        "uid": "445f8a43-7802-4993-9acc-7bf4d2fadea8",
+        "resourceVersion": "203",
+        "creationTimestamp": "2026-11-21T08:17:20Z"
+      }
+    },
+    "timestamp": 1795249040.2168217,
+    "stored_object_http_status": 200
+  },
+  {
+    "case": "deny-fail",
+    "namespace": "janus-test",
+    "expected": 429,
+    "http_status": 429,
+    "body": {
+      "kind": "Status",
+      "apiVersion": "v1",
+      "metadata": {},
+      "status": "Failure",
+      "message": "admission webhook \"contract.janus.local\" denied the request: JANUS synthetic contract",
+      "code": 429
+    },
+    "timestamp": 1795249043.3198252,
+    "stored_object_http_status": 404
+  },
+  {
+    "case": "outside-fail",
+    "namespace": "janus-control",
+    "expected": 201,
+    "http_status": 201,
+    "body": {
+      "kind": "ConfigMap",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "outside-fail",
+        "namespace": "janus-control",
+        "uid": "a5eb05fa-e31f-4bc4-9d51-41a4ea77a4cb",
+        "resourceVersion": "205",
+        "creationTimestamp": "2026-11-21T08:17:23Z"
+      }
+    },
+    "timestamp": 1795249043.3837347,
+    "stored_object_http_status": 200
+  },
+  {
+    "case": "outage-ignore",
+    "namespace": "janus-test",
+    "expected": 201,
+    "http_status": 201,
+    "body": {
+      "kind": "ConfigMap",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "outage-ignore",
+        "namespace": "janus-test",
+        "uid": "d384a2a9-a5cd-4b7e-8da7-52669ace83fa",
+        "resourceVersion": "209",
+        "creationTimestamp": "2026-11-21T08:17:26Z"
+      }
+    },
+    "timestamp": 1795249046.8525267,
+    "stored_object_http_status": 200
+  },
+  {
+    "case": "outage-fail",
+    "namespace": "janus-test",
+    "expected": 500,
+    "http_status": 500,
+    "body": {
+      "kind": "Status",
+      "apiVersion": "v1",
+      "metadata": {},
+      "status": "Failure",
+      "message": "Internal error occurred: failed calling webhook \"contract.janus.local\": failed to call webhook: Post \"https://127.0.0.1:44885/?timeout=2s\": dial tcp 127.0.0.1:44885: connect: connection refused",
+      "reason": "InternalError",
+      "details": {
+        "causes": [
+          {
+            "message": "failed calling webhook \"contract.janus.local\": failed to call webhook: Post \"https://127.0.0.1:44885/?timeout=2s\": dial tcp 127.0.0.1:44885: connect: connection refused"
+          }
+        ]
+      },
+      "code": 500
+    },
+    "timestamp": 1795249049.9498603,
+    "stored_object_http_status": 404
+  }
+]
