@@ -8,6 +8,7 @@ import io
 import json
 import os
 import pathlib
+import signal
 import ssl
 import subprocess
 import tarfile
@@ -18,20 +19,24 @@ import urllib.request
 SCENARIO_SHA256 = hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
 
 def experiment(request, start, port, tmp, output, binaries, assets, treatment,
-               api_port, etcd_port, cert, key, controller_token):
+               api_port, etcd_port, cert, key, controller_token, fault_mode, backend_process):
     count = 8
     state = {'fault': False}
     artifacts = {}
     servers = []
     events = []
+    event_lock = threading.Lock()
     admission_events = []
     transport_events = []
     readiness_seen = collections.defaultdict(set)
+    resume_timer = None
+    backend_paused = False
     def record(event, **values):
-        row = {'event': event, 'time': time.time(), **values}
-        events.append(row)
-        with (output / 'timeline.jsonl').open('a') as stream:
-            stream.write(json.dumps(row) + '\n')
+        with event_lock:
+            row = {'event': event, 'time': time.time(), **values}
+            events.append(row)
+            with (output / 'timeline.jsonl').open('a') as stream:
+                stream.write(json.dumps(row) + '\n')
         print(event, values, flush=True)
 
     def checked(method, path, body=None, expected=(200, 201)):
@@ -215,6 +220,13 @@ def experiment(request, start, port, tmp, output, binaries, assets, treatment,
             time.sleep(1)
         raise RuntimeError(f'revision {number} failed to converge within {timeout}s')
 
+    def resume_backend():
+        nonlocal backend_paused
+        if backend_paused:
+            backend_process.send_signal(signal.SIGCONT)
+            backend_paused = False
+            record('backend_resumed')
+
     try:
         artifact_port = serve(Artifact)
         admission_port = serve(Admission, tls=True)
@@ -242,7 +254,9 @@ def experiment(request, start, port, tmp, output, binaries, assets, treatment,
         crd_hashes = {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in assets.glob('*.yaml')}
         (output / 'treatment.json').write_text(json.dumps({'treatment': treatment, 'apps': count,
             'objects': count * 4, 'interval': '10s', 'retryInterval': '30s' if treatment == 'tuned' else '10s (inherits interval)',
-            'concurrent': 1 if treatment == 'tuned' else 4, 'fault_seconds': 35, 'controller_sha256': digest,
+            'concurrent': 1 if treatment == 'tuned' else 4,
+            'fault_seconds': 35 if fault_mode == 'admission' else 10,
+            'fault_mode': fault_mode, 'controller_sha256': digest,
             'scenario_sha256': SCENARIO_SHA256,
             'crd_sha256': crd_hashes, 'controller_image': 'ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e'}, indent=2))
         (output / 'environment.json').write_text(json.dumps({'kernel': list(os.uname()),
@@ -266,12 +280,25 @@ def experiment(request, start, port, tmp, output, binaries, assets, treatment,
             raise RuntimeError('healthy revision did not converge during observation window')
         record('healthy_ended')
         snapshot('healthy-end')
-        state['fault'] = True
-        fault_deadline = time.monotonic() + 35
-        record('fault_started')
-        revision(3, artifact_port)
+        if fault_mode == 'admission':
+            state['fault'] = True
+            fault_deadline = time.monotonic() + 35
+            record('fault_started', mode=fault_mode)
+            revision(3, artifact_port)
+        else:
+            revision(3, artifact_port)
+            record('source_revision_published')
+            if backend_process.poll() is not None:
+                raise RuntimeError('etcd exited before pause injection')
+            backend_paused = True
+            resume_timer = threading.Timer(10, resume_backend)
+            resume_timer.start()
+            backend_process.send_signal(signal.SIGSTOP)
+            fault_deadline = time.monotonic() + 10
+            record('fault_started', mode=fault_mode)
         time.sleep(max(0, fault_deadline - time.monotonic()))
         state['fault'] = False
+        resume_backend()
         recovery = time.monotonic()
         record('fault_ended')
         snapshot('recovery-start')
@@ -280,6 +307,10 @@ def experiment(request, start, port, tmp, output, binaries, assets, treatment,
         snapshot('recovered')
     finally:
         state['fault'] = False
+        resume_backend()
+        if resume_timer:
+            resume_timer.cancel()
+            resume_timer.join()
         for server in servers:
             server.shutdown()
             server.server_close()

@@ -21,6 +21,7 @@ parser.add_argument('--assets', required=True, type=pathlib.Path)
 parser.add_argument('--output', required=True, type=pathlib.Path)
 parser.add_argument('--flux-assets', type=pathlib.Path, help='Run Flux baseline using CRDs and controller binary in this directory')
 parser.add_argument('--treatment', choices=['default', 'tuned'], default='default')
+parser.add_argument('--fault-mode', choices=['admission', 'etcd-pause'], default='admission')
 args = parser.parse_args()
 BIN = args.assets.resolve()
 OUT = args.output.resolve()
@@ -115,7 +116,7 @@ def main():
                 raise RuntimeError('control plane readiness timeout')
             if args.flux_assets:
                 from flux_baseline import experiment
-                experiment(request, start, port, tmp, OUT, BIN, args.flux_assets.resolve(), args.treatment, ap, ep, cert, key, controller_token)
+                experiment(request, start, port, tmp, OUT, BIN, args.flux_assets.resolve(), args.treatment, ap, ep, cert, key, controller_token, args.fault_mode, processes[0])
                 return
             class Hook(http.server.BaseHTTPRequestHandler):
                 def do_POST(self):
