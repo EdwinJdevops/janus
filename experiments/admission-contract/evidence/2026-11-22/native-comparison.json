@@ -1,0 +1,536 @@
+[
+  {
+    "run": "flux-k137-1-default",
+    "treatment": {
+      "treatment": "default",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "10s (inherits interval)",
+      "concurrent": 4,
+      "fault_seconds": 35,
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a459fbaa0b1e6408263e3c38a9f9fec4ae48e820cdb57e0cb5bffccb8ae72a5d",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        623,
+        628,
+        679
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 35.52959132194519,
+        "requests": 569,
+        "requests_per_second": 16.014819727142534,
+        "status_codes": {
+          "200": 530,
+          "201": 39
+        },
+        "verbs": {
+          "patch": 406,
+          "get": 124,
+          "create": 39
+        },
+        "workload_write_requests_including_dry_run": 156,
+        "median_request_latency_ms": 7.714986801147461,
+        "admission_requests_received": 156,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 35.00058674812317,
+        "requests": 544,
+        "requests_per_second": 15.542596583160734,
+        "status_codes": {
+          "200": 396,
+          "201": 22,
+          "429": 74,
+          "504": 52
+        },
+        "verbs": {
+          "patch": 394,
+          "create": 22,
+          "get": 128
+        },
+        "workload_write_requests_including_dry_run": 126,
+        "median_request_latency_ms": 7.692456245422363,
+        "admission_requests_received": 103,
+        "admission_decisions_deny": 103
+      },
+      "recovery": {
+        "duration_seconds": 9.8504478931427,
+        "requests": 176,
+        "requests_per_second": 17.86720785788033,
+        "status_codes": {
+          "200": 168,
+          "201": 8
+        },
+        "verbs": {
+          "patch": 136,
+          "get": 32,
+          "create": 8
+        },
+        "workload_write_requests_including_dry_run": 64,
+        "median_request_latency_ms": 7.014989852905273,
+        "admission_requests_received": 64,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 9.850446884999997
+  },
+  {
+    "run": "flux-k137-1-tuned",
+    "treatment": {
+      "treatment": "tuned",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "30s",
+      "concurrent": 1,
+      "fault_seconds": 35,
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a459fbaa0b1e6408263e3c38a9f9fec4ae48e820cdb57e0cb5bffccb8ae72a5d",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        1181,
+        1185,
+        1236
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 35.02216291427612,
+        "requests": 584,
+        "requests_per_second": 16.675155141887124,
+        "status_codes": {
+          "200": 544,
+          "201": 40
+        },
+        "verbs": {
+          "patch": 416,
+          "get": 128,
+          "create": 40
+        },
+        "workload_write_requests_including_dry_run": 160,
+        "median_request_latency_ms": 4.974484443664551,
+        "admission_requests_received": 160,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 35.00034165382385,
+        "requests": 272,
+        "requests_per_second": 7.771352711075136,
+        "status_codes": {
+          "200": 192,
+          "429": 26,
+          "201": 16,
+          "504": 38
+        },
+        "verbs": {
+          "patch": 192,
+          "get": 64,
+          "create": 16
+        },
+        "workload_write_requests_including_dry_run": 64,
+        "median_request_latency_ms": 5.156397819519043,
+        "admission_requests_received": 48,
+        "admission_decisions_deny": 48
+      },
+      "recovery": {
+        "duration_seconds": 30.106741905212402,
+        "requests": 176,
+        "requests_per_second": 5.845866701688135,
+        "status_codes": {
+          "200": 168,
+          "201": 8
+        },
+        "verbs": {
+          "patch": 136,
+          "get": 32,
+          "create": 8
+        },
+        "workload_write_requests_including_dry_run": 64,
+        "median_request_latency_ms": 6.572484970092773,
+        "admission_requests_received": 64,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 30.10674180699999
+  },
+  {
+    "run": "flux-k137-2-default",
+    "treatment": {
+      "treatment": "default",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "10s (inherits interval)",
+      "concurrent": 4,
+      "fault_seconds": 35,
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a459fbaa0b1e6408263e3c38a9f9fec4ae48e820cdb57e0cb5bffccb8ae72a5d",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        1674,
+        1679,
+        1734
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 35.197014808654785,
+        "requests": 584,
+        "requests_per_second": 16.592316228375058,
+        "status_codes": {
+          "200": 544,
+          "201": 40
+        },
+        "verbs": {
+          "patch": 416,
+          "get": 128,
+          "create": 40
+        },
+        "workload_write_requests_including_dry_run": 160,
+        "median_request_latency_ms": 9.325027465820312,
+        "admission_requests_received": 160,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 35.00014305114746,
+        "requests": 542,
+        "requests_per_second": 15.48565099313875,
+        "status_codes": {
+          "200": 400,
+          "429": 59,
+          "504": 67,
+          "201": 16
+        },
+        "verbs": {
+          "patch": 398,
+          "get": 128,
+          "create": 16
+        },
+        "workload_write_requests_including_dry_run": 126,
+        "median_request_latency_ms": 7.651925086975098,
+        "admission_requests_received": 94,
+        "admission_decisions_deny": 94
+      },
+      "recovery": {
+        "duration_seconds": 10.358861207962036,
+        "requests": 176,
+        "requests_per_second": 16.990284594673664,
+        "status_codes": {
+          "200": 168,
+          "201": 8
+        },
+        "verbs": {
+          "patch": 136,
+          "get": 32,
+          "create": 8
+        },
+        "workload_write_requests_including_dry_run": 64,
+        "median_request_latency_ms": 8.721590042114258,
+        "admission_requests_received": 64,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 10.358860574000005
+  },
+  {
+    "run": "flux-k137-2-tuned",
+    "treatment": {
+      "treatment": "tuned",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "30s",
+      "concurrent": 1,
+      "fault_seconds": 35,
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a459fbaa0b1e6408263e3c38a9f9fec4ae48e820cdb57e0cb5bffccb8ae72a5d",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        2274,
+        2278,
+        2329
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 35.02645468711853,
+        "requests": 550,
+        "requests_per_second": 15.702417070554109,
+        "status_codes": {
+          "200": 512,
+          "201": 38
+        },
+        "verbs": {
+          "patch": 392,
+          "get": 120,
+          "create": 38
+        },
+        "workload_write_requests_including_dry_run": 152,
+        "median_request_latency_ms": 5.1795244216918945,
+        "admission_requests_received": 152,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 35.00032949447632,
+        "requests": 272,
+        "requests_per_second": 7.7713554108948175,
+        "status_codes": {
+          "200": 192,
+          "429": 29,
+          "201": 16,
+          "504": 35
+        },
+        "verbs": {
+          "patch": 192,
+          "get": 64,
+          "create": 16
+        },
+        "workload_write_requests_including_dry_run": 64,
+        "median_request_latency_ms": 5.188941955566406,
+        "admission_requests_received": 43,
+        "admission_decisions_deny": 43
+      },
+      "recovery": {
+        "duration_seconds": 33.1360068321228,
+        "requests": 176,
+        "requests_per_second": 5.311442651846075,
+        "status_codes": {
+          "200": 168,
+          "201": 8
+        },
+        "verbs": {
+          "patch": 136,
+          "get": 32,
+          "create": 8
+        },
+        "workload_write_requests_including_dry_run": 64,
+        "median_request_latency_ms": 5.3424835205078125,
+        "admission_requests_received": 64,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 33.136008181999955
+  },
+  {
+    "run": "flux-k137-3-default",
+    "treatment": {
+      "treatment": "default",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "10s (inherits interval)",
+      "concurrent": 4,
+      "fault_seconds": 35,
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a459fbaa0b1e6408263e3c38a9f9fec4ae48e820cdb57e0cb5bffccb8ae72a5d",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        2761,
+        2766,
+        2819
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 35.958338260650635,
+        "requests": 518,
+        "requests_per_second": 14.405560019074898,
+        "status_codes": {
+          "200": 482,
+          "201": 36
+        },
+        "verbs": {
+          "patch": 370,
+          "get": 112,
+          "create": 36
+        },
+        "workload_write_requests_including_dry_run": 144,
+        "median_request_latency_ms": 9.824037551879883,
+        "admission_requests_received": 144,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 35.00042772293091,
+        "requests": 596,
+        "requests_per_second": 17.028363330815072,
+        "status_codes": {
+          "200": 430,
+          "429": 65,
+          "504": 79,
+          "201": 22
+        },
+        "verbs": {
+          "patch": 434,
+          "create": 22,
+          "get": 140
+        },
+        "workload_write_requests_including_dry_run": 144,
+        "median_request_latency_ms": 8.31902027130127,
+        "admission_requests_received": 94,
+        "admission_decisions_deny": 94
+      },
+      "recovery": {
+        "duration_seconds": 10.892967939376831,
+        "requests": 176,
+        "requests_per_second": 16.15721270635344,
+        "status_codes": {
+          "200": 168,
+          "201": 8
+        },
+        "verbs": {
+          "patch": 136,
+          "get": 32,
+          "create": 8
+        },
+        "workload_write_requests_including_dry_run": 64,
+        "median_request_latency_ms": 7.792472839355469,
+        "admission_requests_received": 64,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 10.892969421000089
+  },
+  {
+    "run": "flux-k137-3-tuned",
+    "treatment": {
+      "treatment": "tuned",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "30s",
+      "concurrent": 1,
+      "fault_seconds": 35,
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a459fbaa0b1e6408263e3c38a9f9fec4ae48e820cdb57e0cb5bffccb8ae72a5d",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        3301,
+        3305,
+        3366
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 35.59412217140198,
+        "requests": 509,
+        "requests_per_second": 14.30011386568075,
+        "status_codes": {
+          "200": 474,
+          "201": 35
+        },
+        "verbs": {
+          "patch": 362,
+          "get": 112,
+          "create": 35
+        },
+        "workload_write_requests_including_dry_run": 140,
+        "median_request_latency_ms": 4.929065704345703,
+        "admission_requests_received": 140,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 35.001288414001465,
+        "requests": 288,
+        "requests_per_second": 8.228268530960483,
+        "status_codes": {
+          "200": 207,
+          "429": 31,
+          "201": 13,
+          "504": 37
+        },
+        "verbs": {
+          "patch": 207,
+          "get": 68,
+          "create": 13
+        },
+        "workload_write_requests_including_dry_run": 68,
+        "median_request_latency_ms": 5.024433135986328,
+        "admission_requests_received": 49,
+        "admission_decisions_deny": 49
+      },
+      "recovery": {
+        "duration_seconds": 32.05806231498718,
+        "requests": 176,
+        "requests_per_second": 5.490038614021902,
+        "status_codes": {
+          "200": 168,
+          "201": 8
+        },
+        "verbs": {
+          "patch": 136,
+          "get": 32,
+          "create": 8
+        },
+        "workload_write_requests_including_dry_run": 64,
+        "median_request_latency_ms": 5.707502365112305,
+        "admission_requests_received": 64,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 32.058062049
+  }
+]

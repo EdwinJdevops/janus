@@ -4,6 +4,7 @@ import hashlib
 import http.server
 import json
 import pathlib
+import re
 import secrets
 import signal
 import socket
@@ -18,6 +19,8 @@ import urllib.request
 parser = argparse.ArgumentParser(description='Disposable local Kubernetes admission contract experiment')
 parser.add_argument('--assets', required=True, type=pathlib.Path)
 parser.add_argument('--output', required=True, type=pathlib.Path)
+parser.add_argument('--flux-assets', type=pathlib.Path, help='Run Flux baseline using CRDs and controller binary in this directory')
+parser.add_argument('--treatment', choices=['default', 'tuned'], default='default')
 args = parser.parse_args()
 BIN = args.assets.resolve()
 OUT = args.output.resolve()
@@ -43,6 +46,11 @@ def main():
             'version': subprocess.check_output([str(binary), '--version'], text=True).strip(),
         }
     (OUT / 'metadata.json').write_text(json.dumps(metadata, indent=2))
+    if args.flux_assets:
+        version = metadata['binaries']['kube-apiserver']['version']
+        match = re.search(r'v1\.(\d+)\.', version)
+        if match is None or int(match.group(1)) < 35:
+            raise RuntimeError('The Flux baseline requires Kubernetes 1.35 or newer within the Flux support window')
     processes = []
     logs = []
     server = None
@@ -54,23 +62,37 @@ def main():
         key, cert = tmp / 'key.pem', tmp / 'cert.pem'
         run(['openssl', 'req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-keyout', str(key), '-out', str(cert), '-days', '1', '-subj', '/CN=localhost', '-addext', 'subjectAltName=IP:127.0.0.1,DNS:localhost'])
         token = secrets.token_hex(32)
+        controller_token = secrets.token_hex(32)
         tokens = tmp / 'tokens.csv'
-        tokens.write_text(token + ',janus,janus,"system:masters"\n')
+        tokens.write_text(token + ',janus,janus,"system:masters"\n' + controller_token + ',system:serviceaccount:flux-system:controller,flux-controller,"system:serviceaccounts,system:serviceaccounts:flux-system,system:authenticated"\n')
         tokens.chmod(0o600)
+        policy = tmp / 'audit.json'
+        policy.write_text(json.dumps({'apiVersion': 'audit.k8s.io/v1', 'kind': 'Policy', 'omitStages': ['RequestReceived'], 'rules': [{'level': 'Metadata'}]}))
         ep, peer, ap = port(), port(), port()
-        def start(name, args):
+        def stop_process(process):
+            if process.poll() is None:
+                process.terminate()
+                try:
+                    process.wait(timeout=15)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait()
+
+        def start(name, args, env=None):
             log = open(OUT / (name + '.log'), 'w')
             logs.append(log)
             try:
-                process = subprocess.Popen(args, stdout=log, stderr=log)
+                process = subprocess.Popen(args, stdout=log, stderr=log, env=env)
             except Exception:
-                for previous in processes:
-                    previous.terminate()
-                    previous.wait(timeout=15)
+                for previous in reversed(processes):
+                    stop_process(previous)
+                for stream in logs:
+                    stream.close()
+                (OUT / 'cleanup.json').write_text(json.dumps({'processes_stopped': all(p.poll() is not None for p in processes), 'pids': [p.pid for p in processes]}))
                 raise
             processes.append(process)
         start('etcd', [str(BIN / 'etcd'), '--data-dir', str(tmp / 'etcd'), '--listen-client-urls', f'http://127.0.0.1:{ep}', '--advertise-client-urls', f'http://127.0.0.1:{ep}', '--listen-peer-urls', f'http://127.0.0.1:{peer}', '--initial-advertise-peer-urls', f'http://127.0.0.1:{peer}', '--initial-cluster', f'default=http://127.0.0.1:{peer}'])
-        start('apiserver', [str(BIN / 'kube-apiserver'), '--bind-address=127.0.0.1', '--advertise-address=127.0.0.1', f'--secure-port={ap}', f'--etcd-servers=http://127.0.0.1:{ep}', f'--cert-dir={tmp}', f'--tls-cert-file={cert}', f'--tls-private-key-file={key}', f'--token-auth-file={tokens}', '--authorization-mode=RBAC', '--service-cluster-ip-range=10.253.0.0/24', '--service-account-issuer=https://janus.local', f'--service-account-key-file={cert}', f'--service-account-signing-key-file={key}', '--disable-admission-plugins=ServiceAccount'])
+        start('apiserver', [str(BIN / 'kube-apiserver'), '--bind-address=127.0.0.1', '--advertise-address=127.0.0.1', f'--secure-port={ap}', f'--etcd-servers=http://127.0.0.1:{ep}', f'--cert-dir={tmp}', f'--tls-cert-file={cert}', f'--tls-private-key-file={key}', f'--token-auth-file={tokens}', '--authorization-mode=RBAC', '--service-cluster-ip-range=10.253.0.0/24', '--service-account-issuer=https://janus.local', f'--service-account-key-file={cert}', f'--service-account-signing-key-file={key}', '--disable-admission-plugins=ServiceAccount', '--endpoint-reconciler-type=none', f'--audit-policy-file={policy}', f'--audit-log-path={OUT / "audit.jsonl"}'])
         context = ssl.create_default_context(cafile=str(cert))
         def request(method, path, body=None):
             req = urllib.request.Request(f'https://127.0.0.1:{ap}' + path, data=json.dumps(body).encode() if body is not None else None, method=method, headers={'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'})
@@ -91,6 +113,10 @@ def main():
                 time.sleep(1)
             else:
                 raise RuntimeError('control plane readiness timeout')
+            if args.flux_assets:
+                from flux_baseline import experiment
+                experiment(request, start, port, tmp, OUT, BIN, args.flux_assets.resolve(), args.treatment, ap, ep, cert, key, controller_token)
+                return
             class Hook(http.server.BaseHTTPRequestHandler):
                 def do_POST(self):
                     review = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
@@ -157,12 +183,7 @@ def main():
                 server.shutdown()
                 server.server_close()
             for process in reversed(processes):
-                process.terminate()
-                try:
-                    process.wait(timeout=15)
-                except subprocess.TimeoutExpired:
-                    process.kill()
-                    process.wait()
+                stop_process(process)
             for log in logs:
                 log.close()
             (OUT / 'cleanup.json').write_text(json.dumps({'processes_stopped': all(p.poll() is not None for p in processes), 'pids': [p.pid for p in processes]}))
