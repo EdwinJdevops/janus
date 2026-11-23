@@ -1,0 +1,681 @@
+[
+  {
+    "run": "etcd-bounded-1-default",
+    "treatment": {
+      "treatment": "default",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "10s (inherits interval)",
+      "concurrent": 4,
+      "fault_seconds": 10,
+      "fault_mode": "etcd-pause",
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a7cc9656d63934e20539163565f6c5eb9a75f30fa6bfa964ad647809f7a2c4d2",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        1416,
+        1420,
+        1477
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 35.025672912597656,
+        "requests": 584,
+        "requests_per_second": 16.673484088579873,
+        "requests_overlapping_phase": 584,
+        "overlapping_status_codes": {
+          "200": 544,
+          "201": 40
+        },
+        "overlapping_request_seconds": 5.934708595275879,
+        "p99_total_latency_of_overlapping_requests_ms": 52.47998237609863,
+        "status_codes": {
+          "200": 544,
+          "201": 40
+        },
+        "verbs": {
+          "patch": 416,
+          "get": 128,
+          "create": 40
+        },
+        "workload_write_requests_including_dry_run": 160,
+        "median_request_latency_ms": 7.136344909667969,
+        "p95_request_latency_ms": 26.475906372070312,
+        "p99_request_latency_ms": 52.47998237609863,
+        "admission_requests_received": 160,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 10.003940343856812,
+        "requests": 2,
+        "requests_per_second": 0.1999212241632522,
+        "requests_overlapping_phase": 6,
+        "overlapping_status_codes": {
+          "200": 6
+        },
+        "overlapping_request_seconds": 40.001970291137695,
+        "p99_total_latency_of_overlapping_requests_ms": 10031.877994537354,
+        "status_codes": {
+          "200": 2
+        },
+        "verbs": {
+          "patch": 2
+        },
+        "workload_write_requests_including_dry_run": 0,
+        "median_request_latency_ms": 10010.80310344696,
+        "p95_request_latency_ms": 10013.483047485352,
+        "p99_request_latency_ms": 10013.483047485352,
+        "admission_requests_received": 0,
+        "admission_decisions_deny": 0
+      },
+      "recovery": {
+        "duration_seconds": 2.388943910598755,
+        "requests": 170,
+        "requests_per_second": 71.16115168957312,
+        "requests_overlapping_phase": 174,
+        "overlapping_status_codes": {
+          "200": 166,
+          "201": 8
+        },
+        "overlapping_request_seconds": 2.8908472061157227,
+        "p99_total_latency_of_overlapping_requests_ms": 10024.450063705444,
+        "status_codes": {
+          "200": 162,
+          "201": 8
+        },
+        "verbs": {
+          "patch": 130,
+          "get": 32,
+          "create": 8
+        },
+        "workload_write_requests_including_dry_run": 64,
+        "median_request_latency_ms": 13.478517532348633,
+        "p95_request_latency_ms": 36.75484657287598,
+        "p99_request_latency_ms": 94.31290626525879,
+        "admission_requests_received": 64,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 2.388943910598755,
+    "reported_observer_recovery_seconds": 2.3886691940000446,
+    "backend_pause_seconds": 10.003940343856812,
+    "backend_resume_events": 1
+  },
+  {
+    "run": "etcd-bounded-1-tuned",
+    "treatment": {
+      "treatment": "tuned",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "30s",
+      "concurrent": 1,
+      "fault_seconds": 10,
+      "fault_mode": "etcd-pause",
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a7cc9656d63934e20539163565f6c5eb9a75f30fa6bfa964ad647809f7a2c4d2",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        1839,
+        1844,
+        1898
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 35.03780198097229,
+        "requests": 536,
+        "requests_per_second": 15.297763264119176,
+        "requests_overlapping_phase": 536,
+        "overlapping_status_codes": {
+          "200": 499,
+          "201": 37
+        },
+        "overlapping_request_seconds": 3.9102890491485596,
+        "p99_total_latency_of_overlapping_requests_ms": 22.56011962890625,
+        "status_codes": {
+          "200": 499,
+          "201": 37
+        },
+        "verbs": {
+          "patch": 383,
+          "get": 116,
+          "create": 37
+        },
+        "workload_write_requests_including_dry_run": 148,
+        "median_request_latency_ms": 5.064964294433594,
+        "p95_request_latency_ms": 18.215179443359375,
+        "p99_request_latency_ms": 22.56011962890625,
+        "admission_requests_received": 148,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 10.000500679016113,
+        "requests": 1,
+        "requests_per_second": 0.09999499346050579,
+        "requests_overlapping_phase": 1,
+        "overlapping_status_codes": {
+          "200": 1
+        },
+        "overlapping_request_seconds": 9.991954326629639,
+        "p99_total_latency_of_overlapping_requests_ms": 9999.073028564453,
+        "status_codes": {
+          "200": 1
+        },
+        "verbs": {
+          "patch": 1
+        },
+        "workload_write_requests_including_dry_run": 0,
+        "median_request_latency_ms": 9999.073028564453,
+        "p95_request_latency_ms": 9999.073028564453,
+        "p99_request_latency_ms": 9999.073028564453,
+        "admission_requests_received": 0,
+        "admission_decisions_deny": 0
+      },
+      "recovery": {
+        "duration_seconds": 3.0046517848968506,
+        "requests": 190,
+        "requests_per_second": 63.235281024926714,
+        "requests_overlapping_phase": 191,
+        "overlapping_status_codes": {
+          "200": 182,
+          "201": 9
+        },
+        "overlapping_request_seconds": 1.2815308570861816,
+        "p99_total_latency_of_overlapping_requests_ms": 20.742177963256836,
+        "status_codes": {
+          "200": 181,
+          "201": 9
+        },
+        "verbs": {
+          "patch": 145,
+          "get": 36,
+          "create": 9
+        },
+        "workload_write_requests_including_dry_run": 68,
+        "median_request_latency_ms": 5.397796630859375,
+        "p95_request_latency_ms": 16.961097717285156,
+        "p99_request_latency_ms": 20.719051361083984,
+        "admission_requests_received": 68,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 3.0046517848968506,
+    "reported_observer_recovery_seconds": 2.9926632509999536,
+    "backend_pause_seconds": 10.000500679016113,
+    "backend_resume_events": 1
+  },
+  {
+    "run": "etcd-bounded-2-default",
+    "treatment": {
+      "treatment": "default",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "10s (inherits interval)",
+      "concurrent": 4,
+      "fault_seconds": 10,
+      "fault_mode": "etcd-pause",
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a7cc9656d63934e20539163565f6c5eb9a75f30fa6bfa964ad647809f7a2c4d2",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        2294,
+        2298,
+        2347
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 36.29481506347656,
+        "requests": 569,
+        "requests_per_second": 15.677170389348095,
+        "requests_overlapping_phase": 569,
+        "overlapping_status_codes": {
+          "200": 530,
+          "201": 39
+        },
+        "overlapping_request_seconds": 5.514099359512329,
+        "p99_total_latency_of_overlapping_requests_ms": 39.20793533325195,
+        "status_codes": {
+          "200": 530,
+          "201": 39
+        },
+        "verbs": {
+          "patch": 406,
+          "get": 124,
+          "create": 39
+        },
+        "workload_write_requests_including_dry_run": 156,
+        "median_request_latency_ms": 7.462024688720703,
+        "p95_request_latency_ms": 24.393796920776367,
+        "p99_request_latency_ms": 39.20793533325195,
+        "admission_requests_received": 156,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 10.000720024108887,
+        "requests": 0,
+        "requests_per_second": 0.0,
+        "requests_overlapping_phase": 4,
+        "overlapping_status_codes": {
+          "200": 4
+        },
+        "overlapping_request_seconds": 40.00288009643555,
+        "p99_total_latency_of_overlapping_requests_ms": 10026.09395980835,
+        "status_codes": {},
+        "verbs": {},
+        "workload_write_requests_including_dry_run": 0,
+        "median_request_latency_ms": null,
+        "p95_request_latency_ms": null,
+        "p99_request_latency_ms": null,
+        "admission_requests_received": 0,
+        "admission_decisions_deny": 0
+      },
+      "recovery": {
+        "duration_seconds": 5.2496161460876465,
+        "requests": 172,
+        "requests_per_second": 32.764300324736226,
+        "requests_overlapping_phase": 176,
+        "overlapping_status_codes": {
+          "200": 168,
+          "201": 8
+        },
+        "overlapping_request_seconds": 2.603567361831665,
+        "p99_total_latency_of_overlapping_requests_ms": 10025.619983673096,
+        "status_codes": {
+          "200": 164,
+          "201": 8
+        },
+        "verbs": {
+          "patch": 132,
+          "get": 32,
+          "create": 8
+        },
+        "workload_write_requests_including_dry_run": 64,
+        "median_request_latency_ms": 11.46245002746582,
+        "p95_request_latency_ms": 35.53605079650879,
+        "p99_request_latency_ms": 51.6970157623291,
+        "admission_requests_received": 64,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 5.2496161460876465,
+    "reported_observer_recovery_seconds": 5.242052897000008,
+    "backend_pause_seconds": 10.000720024108887,
+    "backend_resume_events": 2
+  },
+  {
+    "run": "etcd-bounded-2-tuned",
+    "treatment": {
+      "treatment": "tuned",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "30s",
+      "concurrent": 1,
+      "fault_seconds": 10,
+      "fault_mode": "etcd-pause",
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a7cc9656d63934e20539163565f6c5eb9a75f30fa6bfa964ad647809f7a2c4d2",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        2715,
+        2719,
+        2771
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 35.037954568862915,
+        "requests": 448,
+        "requests_per_second": 12.786134507923672,
+        "requests_overlapping_phase": 448,
+        "overlapping_status_codes": {
+          "200": 416,
+          "201": 32
+        },
+        "overlapping_request_seconds": 2.9625461101531982,
+        "p99_total_latency_of_overlapping_requests_ms": 18.83101463317871,
+        "status_codes": {
+          "200": 416,
+          "201": 32
+        },
+        "verbs": {
+          "patch": 320,
+          "get": 96,
+          "create": 32
+        },
+        "workload_write_requests_including_dry_run": 128,
+        "median_request_latency_ms": 4.869937896728516,
+        "p95_request_latency_ms": 15.599966049194336,
+        "p99_request_latency_ms": 18.83101463317871,
+        "admission_requests_received": 128,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 10.000331401824951,
+        "requests": 1,
+        "requests_per_second": 0.09999668609157401,
+        "requests_overlapping_phase": 1,
+        "overlapping_status_codes": {
+          "200": 1
+        },
+        "overlapping_request_seconds": 9.998316049575806,
+        "p99_total_latency_of_overlapping_requests_ms": 10005.749940872192,
+        "status_codes": {
+          "200": 1
+        },
+        "verbs": {
+          "patch": 1
+        },
+        "workload_write_requests_including_dry_run": 0,
+        "median_request_latency_ms": 10005.749940872192,
+        "p95_request_latency_ms": 10005.749940872192,
+        "p99_request_latency_ms": 10005.749940872192,
+        "admission_requests_received": 0,
+        "admission_decisions_deny": 0
+      },
+      "recovery": {
+        "duration_seconds": 2.4919536113739014,
+        "requests": 187,
+        "requests_per_second": 75.04152531029675,
+        "requests_overlapping_phase": 188,
+        "overlapping_status_codes": {
+          "200": 179,
+          "201": 9
+        },
+        "overlapping_request_seconds": 1.5660679340362549,
+        "p99_total_latency_of_overlapping_requests_ms": 35.884857177734375,
+        "status_codes": {
+          "200": 178,
+          "201": 9
+        },
+        "verbs": {
+          "get": 36,
+          "patch": 142,
+          "create": 9
+        },
+        "workload_write_requests_including_dry_run": 68,
+        "median_request_latency_ms": 6.446123123168945,
+        "p95_request_latency_ms": 23.944854736328125,
+        "p99_request_latency_ms": 35.48312187194824,
+        "admission_requests_received": 68,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 2.4919536113739014,
+    "reported_observer_recovery_seconds": 2.4917063679999956,
+    "backend_pause_seconds": 10.000331401824951,
+    "backend_resume_events": 1
+  },
+  {
+    "run": "etcd-bounded-3-default",
+    "treatment": {
+      "treatment": "default",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "10s (inherits interval)",
+      "concurrent": 4,
+      "fault_seconds": 10,
+      "fault_mode": "etcd-pause",
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a7cc9656d63934e20539163565f6c5eb9a75f30fa6bfa964ad647809f7a2c4d2",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        3116,
+        3120,
+        3177
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 35.8403434753418,
+        "requests": 484,
+        "requests_per_second": 13.504334865903074,
+        "requests_overlapping_phase": 484,
+        "overlapping_status_codes": {
+          "200": 450,
+          "201": 34
+        },
+        "overlapping_request_seconds": 7.362866640090942,
+        "p99_total_latency_of_overlapping_requests_ms": 90.59810638427734,
+        "status_codes": {
+          "200": 450,
+          "201": 34
+        },
+        "verbs": {
+          "patch": 346,
+          "get": 104,
+          "create": 34
+        },
+        "workload_write_requests_including_dry_run": 136,
+        "median_request_latency_ms": 9.879469871520996,
+        "p95_request_latency_ms": 45.84908485412598,
+        "p99_request_latency_ms": 90.59810638427734,
+        "admission_requests_received": 136,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 10.003633260726929,
+        "requests": 5,
+        "requests_per_second": 0.4998184029425992,
+        "requests_overlapping_phase": 5,
+        "overlapping_status_codes": {
+          "200": 4,
+          "201": 1
+        },
+        "overlapping_request_seconds": 49.415093660354614,
+        "p99_total_latency_of_overlapping_requests_ms": 10026.693105697632,
+        "status_codes": {
+          "200": 4,
+          "201": 1
+        },
+        "verbs": {
+          "patch": 4,
+          "create": 1
+        },
+        "workload_write_requests_including_dry_run": 0,
+        "median_request_latency_ms": 9918.536186218262,
+        "p95_request_latency_ms": 10026.693105697632,
+        "p99_request_latency_ms": 10026.693105697632,
+        "admission_requests_received": 0,
+        "admission_decisions_deny": 0
+      },
+      "recovery": {
+        "duration_seconds": 7.92026686668396,
+        "requests": 211,
+        "requests_per_second": 26.640516481528735,
+        "requests_overlapping_phase": 216,
+        "overlapping_status_codes": {
+          "200": 204,
+          "201": 12
+        },
+        "overlapping_request_seconds": 3.9048280715942383,
+        "p99_total_latency_of_overlapping_requests_ms": 9918.536186218262,
+        "status_codes": {
+          "200": 200,
+          "201": 11
+        },
+        "verbs": {
+          "patch": 156,
+          "get": 44,
+          "create": 11
+        },
+        "workload_write_requests_including_dry_run": 76,
+        "median_request_latency_ms": 12.139081954956055,
+        "p95_request_latency_ms": 60.508012771606445,
+        "p99_request_latency_ms": 85.39199829101562,
+        "admission_requests_received": 76,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 7.92026686668396,
+    "reported_observer_recovery_seconds": 7.919899934,
+    "backend_pause_seconds": 10.003633260726929,
+    "backend_resume_events": 1
+  },
+  {
+    "run": "etcd-bounded-3-tuned",
+    "treatment": {
+      "treatment": "tuned",
+      "apps": 8,
+      "objects": 32,
+      "interval": "10s",
+      "retryInterval": "30s",
+      "concurrent": 1,
+      "fault_seconds": 10,
+      "fault_mode": "etcd-pause",
+      "controller_sha256": "8065052997318646e734597f5c760b436480ff2f5611e1aaeecd7bb4f5769dba",
+      "scenario_sha256": "a7cc9656d63934e20539163565f6c5eb9a75f30fa6bfa964ad647809f7a2c4d2",
+      "crd_sha256": {
+        "ocirepositories.yaml": "dcb7198a1c747ad96b8ca5218d2780896800306098497159fa77ecd7aba9a886",
+        "kustomizations.yaml": "dec77e391bff9307e47898d2d7448c5083a49b85700f6f870c7849449e11aad0",
+        "gitrepositories.yaml": "ae4d504172dd9504b38d4e770842fcc086168e83707308dd56cba708f3c1daa0",
+        "externalartifacts.yaml": "f78536e2c0c6719221adff02da257bf3d2dc20dcd9636ce304656fa3f320c102",
+        "buckets.yaml": "86c81cb80ed002322f27a4a4042422fc04d58b418863711d09ccf85e7faf304e"
+      },
+      "controller_image": "ghcr.io/fluxcd/kustomize-controller@sha256:37db29b25dae35b881a5e064acedb0cc954442da453a39eaa0eab7a90dbecc4e"
+    },
+    "cleanup": {
+      "processes_stopped": true,
+      "pids": [
+        3531,
+        3535,
+        3602
+      ]
+    },
+    "phases": {
+      "healthy": {
+        "duration_seconds": 35.02907133102417,
+        "requests": 499,
+        "requests_per_second": 14.245310567455753,
+        "requests_overlapping_phase": 499,
+        "overlapping_status_codes": {
+          "200": 464,
+          "201": 35
+        },
+        "overlapping_request_seconds": 4.28317666053772,
+        "p99_total_latency_of_overlapping_requests_ms": 36.1180305480957,
+        "status_codes": {
+          "200": 464,
+          "201": 35
+        },
+        "verbs": {
+          "patch": 356,
+          "get": 108,
+          "create": 35
+        },
+        "workload_write_requests_including_dry_run": 140,
+        "median_request_latency_ms": 5.759954452514648,
+        "p95_request_latency_ms": 23.11396598815918,
+        "p99_request_latency_ms": 36.1180305480957,
+        "admission_requests_received": 140,
+        "admission_decisions_deny": 0
+      },
+      "fault": {
+        "duration_seconds": 10.00006365776062,
+        "requests": 0,
+        "requests_per_second": 0.0,
+        "requests_overlapping_phase": 1,
+        "overlapping_status_codes": {
+          "200": 1
+        },
+        "overlapping_request_seconds": 10.00006365776062,
+        "p99_total_latency_of_overlapping_requests_ms": 10016.288995742798,
+        "status_codes": {},
+        "verbs": {},
+        "workload_write_requests_including_dry_run": 0,
+        "median_request_latency_ms": null,
+        "p95_request_latency_ms": null,
+        "p99_request_latency_ms": null,
+        "admission_requests_received": 0,
+        "admission_decisions_deny": 0
+      },
+      "recovery": {
+        "duration_seconds": 7.143291711807251,
+        "requests": 175,
+        "requests_per_second": 24.498509519181464,
+        "requests_overlapping_phase": 176,
+        "overlapping_status_codes": {
+          "200": 168,
+          "201": 8
+        },
+        "overlapping_request_seconds": 1.4381890296936035,
+        "p99_total_latency_of_overlapping_requests_ms": 39.515018463134766,
+        "status_codes": {
+          "200": 167,
+          "201": 8
+        },
+        "verbs": {
+          "patch": 135,
+          "get": 32,
+          "create": 8
+        },
+        "workload_write_requests_including_dry_run": 64,
+        "median_request_latency_ms": 5.717039108276367,
+        "p95_request_latency_ms": 21.00396156311035,
+        "p99_request_latency_ms": 39.450883865356445,
+        "admission_requests_received": 64,
+        "admission_decisions_deny": 0
+      }
+    },
+    "recovery_seconds": 7.143291711807251,
+    "reported_observer_recovery_seconds": 7.1430941939999,
+    "backend_pause_seconds": 10.00006365776062,
+    "backend_resume_events": 1
+  }
+]

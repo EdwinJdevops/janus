@@ -31,9 +31,12 @@ def experiment(request, start, port, tmp, output, binaries, assets, treatment,
     readiness_seen = collections.defaultdict(set)
     resume_timer = None
     backend_paused = False
-    def record(event, **values):
+    resume_lock = threading.Lock()
+    backend_resume_wall = None
+    backend_resume_clock = None
+    def record(event, at=None, **values):
+        row = {'event': event, 'time': time.time() if at is None else at, **values}
         with event_lock:
-            row = {'event': event, 'time': time.time(), **values}
             events.append(row)
             with (output / 'timeline.jsonl').open('a') as stream:
                 stream.write(json.dumps(row) + '\n')
@@ -221,11 +224,14 @@ def experiment(request, start, port, tmp, output, binaries, assets, treatment,
         raise RuntimeError(f'revision {number} failed to converge within {timeout}s')
 
     def resume_backend():
-        nonlocal backend_paused
-        if backend_paused:
-            backend_process.send_signal(signal.SIGCONT)
-            backend_paused = False
-            record('backend_resumed')
+        nonlocal backend_paused, backend_resume_wall, backend_resume_clock
+        with resume_lock:
+            if backend_paused:
+                backend_process.send_signal(signal.SIGCONT)
+                backend_resume_wall = time.time()
+                backend_resume_clock = time.monotonic()
+                backend_paused = False
+                record('backend_resumed', at=backend_resume_wall)
 
     try:
         artifact_port = serve(Artifact)
@@ -299,8 +305,8 @@ def experiment(request, start, port, tmp, output, binaries, assets, treatment,
         time.sleep(max(0, fault_deadline - time.monotonic()))
         state['fault'] = False
         resume_backend()
-        recovery = time.monotonic()
-        record('fault_ended')
+        recovery = backend_resume_clock if fault_mode == 'etcd-pause' else time.monotonic()
+        record('fault_ended', at=backend_resume_wall if fault_mode == 'etcd-pause' else None)
         snapshot('recovery-start')
         wait_convergence(3, 120)
         record('recovered', convergence_seconds=time.monotonic() - recovery)

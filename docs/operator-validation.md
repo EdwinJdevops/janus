@@ -29,3 +29,10 @@ Do not treat expressions of interest as purchase commitments or usage validation
 ## Go/no-go criteria
 
 Do not assert demand or adoption until independent operators provide attributable incident evidence and at least one team agrees to a scoped nonproduction evaluation. Record refusals and existing satisfactory mitigations.
+
+## Public incident leads reviewed November 22, 2026
+
+Two historical reports provide leads for further validation. They describe older Argo CD releases and remain unverified against the currently pinned controller. Their attached images were not independently analyzed. Direct operator interviews and evaluation commitments remain pending.
+
+* Argo CD issue 10529, opened September 6, 2022, describes API network flapping, frequent application-status events and etcd growth with Argo CD 2.3.4. Treat the reviewed text as an E1 narrative. It raises event/status churn as a separate attribution target from application-resource writes. [Original report](https://github.com/argoproj/argo-cd/issues/10529)
+* Argo CD issue 16284, opened November 8, 2023, reports etcd growth and an outage after upgrades through Argo CD 2.8.6. The reporter described difficulty reproducing the behavior across similar installations. Treat the reviewed text as an E1 narrative and preserve that counterexample. Current-version applicability remains unresolved. [Original report](https://github.com/argoproj/argo-cd/issues/16284)

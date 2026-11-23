@@ -57,6 +57,14 @@ python3 experiments/admission-contract/analyze_flux.py \
   /path/to/run-default /path/to/run-tuned --output /path/to/comparison.json
 ```
 
-The analyzer excludes watches and attributes completed API requests by their request-received timestamp. Counts include server-side dry runs. Long-lived watches and requests crossing phase boundaries require separate interpretation. Admission decisions received by the fixture can exceed client-visible 429 responses because sibling requests may be cancelled.
+The analyzer excludes watches and attributes completed API requests by their request-received timestamp. Counts include server-side dry runs. Separate overlap fields include requests already in flight when a phase begins and sum their time within that phase. That waiting time is distinct from CPU or storage work. Latency percentiles use the empirical nearest-rank method. Admission decisions received by the fixture can exceed client-visible 429 responses because sibling requests may be cancelled.
 
 This experiment measures controller behavior under admission rejection. It does not inject etcd latency or API-server resource exhaustion and cannot establish the original degradation-amplification hypothesis or production safety.
+
+## Bounded backend interruption
+
+Pass `--fault-mode etcd-pause` to replace admission denial with a ten-second suspension of the fixture's own etcd child process. The webhook continues allowing requests. The driver publishes the final source revision immediately before pausing etcd, records the transition, and schedules an independent timer to resume that child. Normal completion and interruption also resume it before teardown. The fixture never looks up or signals an existing system etcd process.
+
+The paired treatments have identical initial manifests, assets and pause duration. Progress before the pause can differ between treatments. This models a complete short backend interruption. Disk latency, network degradation, sustained API-server saturation and production-scale behavior require additional experiments.
+
+The interruption regression check terminates the runner during an active backend pause and verifies exactly one resumption and complete child-process teardown. Run `python3 experiments/admission-contract/check_interruption.py` with the same `--assets`, `--flux-assets` and fresh `--output` arguments. Run analysis unit checks with `python3 -m unittest discover -s experiments/admission-contract -p 'test_*.py'`.

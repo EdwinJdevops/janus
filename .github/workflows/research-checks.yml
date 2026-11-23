@@ -17,12 +17,12 @@ jobs:
           cache: false
       - name: Check experiment Python syntax
         run: python3 -m py_compile experiments/admission-contract/*.py
+      - name: Check audit phase accounting
+        run: python3 -m unittest discover -s experiments/admission-contract -p 'test_*.py'
+      - name: Check experiment shell syntax
+        run: bash -n scripts/check-research.sh experiments/admission-contract/prepare-assets.sh
       - name: Run unit tests
         run: go test -race -count=1 ./...
       - name: Check required research artifacts
         shell: bash
-        run: |
-          set -euo pipefail
-          for f in README.md docs/hypotheses.md docs/experiment-protocol.md docs/source-audit.md docs/operator-validation.md docs/decisions/0001-validation-before-implementation.md docs/findings/0001-admission-vs-apf.md docs/findings/0002-gitops-reconciliation.md docs/findings/0003-release-baseline.md; do
-            test -s "$f" || { echo "Missing or empty: $f"; exit 1; }
-          done
+        run: bash scripts/check-research.sh
