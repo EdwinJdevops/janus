@@ -30,3 +30,5 @@ Reproduce with [the Flux experiment guide](../../experiments/admission-contract/
 * A shell invocation lost loop-variable arguments while crossing PowerShell/WSL. A shell script was used for the execution loop.
 * An initial backend-pause experiment lost a timeline event through concurrent appends from the timer and main thread. Its data is excluded. Timeline writes are now serialized.
 * The security plugin could not resolve the supplied local Git worktree and did not start a scan. Direct source review continued. Image attestation verification failed first with a network error and then HTTP 404. Both verification gaps remain explicit.
+
+Subsequent Standard source scanning, image-signature verification and source-release provenance verification are recorded in [the November 24 finding](0008-security-and-provenance.md). Container-image SLSA provenance remains a separate unresolved item.
