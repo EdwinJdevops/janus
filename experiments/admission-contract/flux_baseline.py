@@ -296,10 +296,13 @@ def experiment(request, start, port, tmp, output, binaries, assets, treatment,
             record('source_revision_published')
             if backend_process.poll() is not None:
                 raise RuntimeError('etcd exited before pause injection')
-            backend_paused = True
-            resume_timer = threading.Timer(10, resume_backend)
-            resume_timer.start()
-            backend_process.send_signal(signal.SIGSTOP)
+            # Keep the watchdog from resuming before SIGSTOP is delivered if
+            # this thread is descheduled during fault setup.
+            with resume_lock:
+                backend_paused = True
+                resume_timer = threading.Timer(10, resume_backend)
+                resume_timer.start()
+                backend_process.send_signal(signal.SIGSTOP)
             fault_deadline = time.monotonic() + 10
             record('fault_started', mode=fault_mode)
         time.sleep(max(0, fault_deadline - time.monotonic()))

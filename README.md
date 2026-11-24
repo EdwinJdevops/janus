@@ -10,6 +10,8 @@ Six Flux runs against Kubernetes 1.37.0 and etcd 3.7.0 measured a native-control
 
 Six further runs paused the disposable etcd backend for ten seconds. All recovered the final workload state. These runs establish bounded interruption and recovery behavior for this fixture. [Backend experiment and limitations](docs/findings/0007-bounded-backend-interruption.md)
 
+The pinned Flux image signature and source-release provenance were verified with Cosign. A plugin-backed source security scan completed with no exploitable findings in its reviewed scope. Its limitations and the subsequent watchdog hardening are recorded in [the verification finding](docs/findings/0008-security-and-provenance.md).
+
 ## Run the experiments
 
 Use Linux amd64 or WSL with Python 3.11+, OpenSSL, curl, tar and an accessible Docker daemon for asset extraction. The experiments create a loopback-only control plane with temporary credentials. Runtime uses the extracted binaries.
