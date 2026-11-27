@@ -1,0 +1,40 @@
+name: Integration evidence
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  local-control-plane:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare pinned runtime assets
+        run: bash experiments/admission-contract/prepare-assets.sh "$RUNNER_TEMP/janus-assets"
+      - name: Verify admission contract
+        run: |
+          python3 experiments/admission-contract/run.py \
+            --assets "$RUNNER_TEMP/janus-assets/envtest/controller-tools/envtest" \
+            --output "$RUNNER_TEMP/janus-evidence/admission"
+      - name: Verify native controller treatments
+        run: |
+          for treatment in default tuned; do
+            python3 experiments/admission-contract/run.py \
+              --assets "$RUNNER_TEMP/janus-assets/envtest/controller-tools/envtest" \
+              --flux-assets "$RUNNER_TEMP/janus-assets/flux" \
+              --treatment "$treatment" \
+              --output "$RUNNER_TEMP/janus-evidence/$treatment"
+          done
+      - name: Verify interruption during backend pause
+        run: |
+          python3 experiments/admission-contract/check_interruption.py \
+            --assets "$RUNNER_TEMP/janus-assets/envtest/controller-tools/envtest" \
+            --flux-assets "$RUNNER_TEMP/janus-assets/flux" \
+            --output "$RUNNER_TEMP/janus-evidence/interruption"
+      - name: Retain executable evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: janus-integration-evidence
+          path: ${{ runner.temp }}/janus-evidence
+          retention-days: 7
